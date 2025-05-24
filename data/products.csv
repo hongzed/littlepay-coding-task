@@ -1,0 +1,7 @@
+"id","product_type","capping_type","created_date","start_date_utc","status","rules_default_limit","rules_max_fare_value","rules_transaction_types","rules_from_time_local","rules_to_time_local","rules_weekly_cap_start_day","rules_capping_duration_in_minutes","rules_number_of_transfer"
+"734f80f1-367a-4642-a482-ab18ae3668aa","CAPPING","DAILY_CAP","2019-07-17T15:30:56Z","2019-07-17T15:30:56Z","ACTIVE","5.2","5.2","autoscan, variable","00:00:00","23:59:59","SUNDAY","0.0",
+"37f8562e-969d-4d75-84dd-70709b9893c4","CAPPING","DAILY_CAP","2019-07-17T15:42:56Z","2019-07-17T15:42:56Z","ACTIVE","4.5","4.5","autoscan, variable","18:00:00","03:59:59","SUNDAY","0.0",
+"29edf630-870f-4b84-9113-ade5ab2413a0","CAPPING","DAILY_CAP","2019-07-17T15:44:57Z","2019-07-17T15:44:57Z","ACTIVE","5.2","5.2","autoscan, variable","00:00:00","23:59:59","SUNDAY","0.0",
+"9e564b22-fb50-4e66-b947-52fb50bacbc0","CAPPING","DAILY_CAP","2019-07-17T15:54:18Z","2019-07-17T15:54:18Z","ACTIVE","5.2","5.2","autoscan, variable","00:00:00","23:59:59","SUNDAY","0.0",
+"41791521-18f3-45c3-9c40-e611ac0cdade","CAPPING","DAILY_CAP","2019-07-17T15:56:29Z","2019-07-17T15:56:29Z","ACTIVE","5.2","5.2","autoscan, variable","00:00:00","23:59:59","SUNDAY","0.0",
+"b6de8022-2d7b-46db-aa9f-5bd5e77185b9","CAPPING","DAILY_CAP","2019-07-17T15:57:54Z","2019-07-17T15:57:54Z","ACTIVE","7.8","7.8","autoscan, variable","00:00:00","23:59:59","SUNDAY","0.0"
