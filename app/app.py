@@ -1,13 +1,15 @@
 import pandas as pd
 import streamlit as st
+from utils import load_data
+from utils import preprocess_data
 
 st.set_page_config(page_title="Capping Product Visualisation", layout="wide")
 
-# Set default page to Upload & Preview
+# Set the lannding page
 if "page" not in st.session_state:
     st.session_state.page = "Upload & Preview"
 
-# Sidebar for navigation using radio buttons
+# Set the page navigation
 page = st.sidebar.radio(
     "Choose a page",
     ["Upload & Preview", "Capping Visualisation"],
@@ -16,43 +18,9 @@ page = st.sidebar.radio(
 st.session_state.page = page
 
 
-@st.cache_data
-def load_data(file):
-    return pd.read_csv(file)
-
-
-@st.cache_data
-def preprocess_data(trips, products, adjustments):
-    # Convert date fields
-    trips["tap_on_date"] = pd.to_datetime(trips["tap_on_date"], errors="coerce")
-    trips["tap_off_date"] = pd.to_datetime(trips["tap_off_date"], errors="coerce")
-    products["created_date"] = pd.to_datetime(products["created_date"], errors="coerce")
-    products["start_date_utc"] = pd.to_datetime(
-        products["start_date_utc"], errors="coerce"
-    )
-
-    # Convert bool
-    adjustments["applied"] = adjustments["applied"].astype(bool)
-
-    # Merge for visualisation
-    merged = adjustments.merge(trips, on="trip_id", how="left")
-    merged = merged.merge(
-        products[["id", "capping_type"]],
-        left_on="product_id",
-        right_on="id",
-        how="left",
-    )
-    merged = merged.drop(
-        columns=["id"]
-    )  # Drop product's id column from the final result
-
-    # Create additional fields
-    merged["tap_on_day"] = merged["tap_on_date"].dt.date
-
-    return merged
-
-
 def main():
+
+    # Initialize session state for datasets
     if page == "Upload & Preview":
         st.header("Upload and Preview Datasets")
 
@@ -86,6 +54,7 @@ def main():
             st.dataframe(st.session_state.merged.head())
 
     else:
+        # Render the visualisation page
         st.header("Capping Product Visualisation")
 
         if "merged" not in st.session_state:
@@ -98,11 +67,9 @@ def main():
 
         st.sidebar.subheader("Filters")
 
-        # Date range filter
-        # date_range = st.sidebar.date_input("Select Date Range", [pd.to_datetime(merged['tap_on_date'].min()), pd.to_datetime(merged['tap_on_date'].max())])
-
         start_date = st.sidebar.date_input("Start Date", merged["tap_on_date"].min())
         end_date = st.sidebar.date_input("End Date", merged["tap_on_date"].max())
+
         # Convert date inputs to datetime
         start_date = pd.to_datetime(start_date)
         end_date = pd.to_datetime(end_date)
@@ -139,9 +106,11 @@ def main():
             .reset_index()
         )
 
+        # 1. Transaction Volume per Day
         st.subheader("Transaction Volume per Day")
         st.bar_chart(daily_stats.set_index("tap_on_day")["trip_count"])
 
+        # 2. Total Original, Adjusted, and Savings Amounts per Day
         st.subheader("Original vs Adjusted vs Savings (Bar Chart)")
         chart_data = daily_stats.set_index("tap_on_day")[
             ["total_original", "total_adjusted", "total_savings"]
@@ -151,6 +120,7 @@ def main():
         st.subheader("Original vs Adjusted vs Savings (Line Chart)")
         st.line_chart(chart_data)
 
+        # 3. Volume by capping type, Daily vs. Weekly product
         st.subheader("Popularity of Capping Type")
         capping_stats = (
             filtered.groupby("capping_type")["trip_id"].nunique().reset_index()
