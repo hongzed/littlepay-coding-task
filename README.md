@@ -30,10 +30,8 @@ pip install -r requirements.txt
 ```
 
 ```bash
-streamlit run app.py
+streamlit run app/app.py
 ```
-
-The app will be available at http://localhost:8501
 
 2. Run with Docker
 
